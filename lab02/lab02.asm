@@ -17,11 +17,24 @@ main:
         addiu      $s0, $zero, 0     # sum of positive odd values starts as 0
         addiu      $s1, $zero, 0     # sum of negative even values starts as 0
 
-        ########################################################################
-        #  Write your code here
-        # NOTE: Don't print out the results! Automatic testing will get the final
-        #  values of $s0, $s1 and check if they are correct
-        ########################################################################
+loop:
+	addiu	$t4,$t4,1
+	sll	$t1, $t4 ,2		
+	add	$t1,$t1,$a1
+	lw	$t0,0($t1)
+	bne	$t4, $a0 exit
+	andi	$t3,$t0,0x1		
+	beq	$t3,$zero pos
+arn:
+	slt	$t2,$t0,$zero
+	beq	$t2,$zero loop
+	add	$s1,$s1,$t0
+	j loop
+pos:
+	slt	$t2,$t0,$zero
+	bne	$t2,$zero loop
+	add	$s0,$s0,$t0
+	j loop
         
 exit: 
         addiu      $v0, $zero, 10    # system service 10 is exit
